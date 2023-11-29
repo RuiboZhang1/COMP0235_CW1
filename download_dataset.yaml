@@ -1,0 +1,20 @@
+---
+- name: Download pdb70 directory from S3
+  hosts: clients
+  become: yes
+  tasks:
+    # - name: Check if /home/ec2-user/data/pdb70 already exists
+    #   ansible.builtin.stat:
+    #     path: /home/ec2-user/data/pdb70
+    #   register: pdb70_directory
+
+    # - name: Create directory /home/ec2-user/data/pdb70
+    #   ansible.builtin.file:
+    #     path: /home/ec2-user/data/pdb70
+    #     state: directory
+    #     mode: '0755'
+    #   when: not pdb70_directory.stat.exists
+
+    - name: Sync S3 bucket directory to local directory
+      ansible.builtin.command:
+        cmd: aws s3 cp s3://comp0235-ucabrz5/pdb70/ /home/ec2-user/data/pdb70/

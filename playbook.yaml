@@ -1,9 +1,11 @@
 ---
-- name: Remove Python Packages Directory
+- name: Install Python Dependencies
   hosts: clients
   become: yes
   tasks:
-    - name: Delete /home/ec2-user/data/python_pkgs directory
-      ansible.builtin.file:
-        path: /home/ec2-user/data/python_pkgs
-        state: absent
+    - name: Install Python Dependencies with pip
+      pip:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - awscli

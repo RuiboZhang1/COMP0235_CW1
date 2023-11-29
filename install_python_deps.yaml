@@ -11,6 +11,8 @@
         - biopython
         - numpy
         - awscli
+        - boto3
+        - botocore
         - scipy
         
     - name: Install PyTorch (CPU version)

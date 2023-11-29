@@ -1,0 +1,31 @@
+---
+- name: Install HH-suite AVX2 build
+  hosts: clients
+  become: yes
+  tasks:
+    - name: Create local directory for HH-suite
+      ansible.builtin.file:
+        path: /home/ec2-user/data/hhsuite
+        state: directory
+
+    - name: Download the HH-suite AVX2 build archive
+      ansible.builtin.get_url:
+        url: https://github.com/soedinglab/hh-suite/releases/download/v3.3.0/hhsuite-3.3.0-AVX2-Linux.tar.gz
+        dest: "/home/ec2-user/data/hhsuite/hhsuite-3.3.0-AVX2-Linux.tar.gz"
+
+    - name: Extract HH-suite AVX2 build archive
+      ansible.builtin.unarchive:
+        src: "/home/ec2-user/data/hhsuite/hhsuite-3.3.0-AVX2-Linux.tar.gz"
+        dest: "/home/ec2-user/data/hhsuite/"
+        remote_src: yes
+
+    - name: Remove the HH-suite tar.gz file
+      ansible.builtin.file:
+        path: "/home/ec2-user/data/hhsuite/hhsuite-3.3.0-AVX2-Linux.tar.gz"
+        state: absent
+
+    - name: Add HH-suite to PATH
+      ansible.builtin.lineinfile:
+        path: /home/ec2-user/.bashrc
+        line: 'export PATH=$PATH:/home/ec2-user/data/hhsuite/bin:/home/ec2-user/data/hhsuite/scripts'
+        create: yes

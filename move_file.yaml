@@ -1,0 +1,32 @@
+---
+- name: Organize coursework files
+  hosts: clients
+  become: yes
+  tasks:
+    - name: Create coursework_example_output directory
+      ansible.builtin.file:
+        path: /home/ec2-user/data/coursework/coursework_example_output
+        state: directory
+
+    - name: Create pipeline_example directory
+      ansible.builtin.file:
+        path: /home/ec2-user/data/coursework/pipeline_example
+        state: directory
+
+    - name: Move example output CSV files to coursework_example_output
+      ansible.builtin.command:
+        cmd: mv /home/ec2-user/data/coursework/{{ item }} /home/ec2-user/data/coursework/coursework_example_output/
+      loop:
+        - example_hits_output.csv
+        - example_profile_output.csv
+
+    - name: Move pipeline files to pipeline_example
+      ansible.builtin.command:
+        cmd: mv /home/ec2-user/data/coursework/{{ item }} /home/ec2-user/data/coursework/pipeline_example/
+      loop:
+        - hhr_parse.out
+        - test.fa
+        - tmp.a3m
+        - tmp.fas
+        - tmp.hhr
+        - tmp.horiz

@@ -1,0 +1,25 @@
+---
+- name: Fetch coursework directory from S3
+  hosts: clients
+  become: yes
+  tasks:
+    - name: Create local directory for S3 files
+      ansible.builtin.file:
+        path: /home/ec2-user/data/coursework/
+        state: directory
+
+    - name: List files
+      amazon.aws.aws_s3: 
+        mode: list
+        bucket: comp0235-ucabrz5
+        prefix : coursework
+      register: listresult
+
+    - name: Copy files
+      amazon.aws.aws_s3:
+        bucket: comp0235-ucabrz5
+        object: '{{ item }}'
+        dest: '/home/ec2-user/data/coursework/{{ item|basename }}'
+        mode: get
+      with_items: '{{listresult.s3_keys}}'
+

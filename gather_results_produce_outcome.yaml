@@ -1,0 +1,8 @@
+- name: Gather hhr_parse.out files from clients
+  hosts: clients
+  tasks:
+    - name: Fetch hhr_parse.out file from each client
+      ansible.builtin.fetch:
+        src: /home/ec2-user/data/coursework/main_pipeline/hhr_parse.out
+        dest: /home/ec2-user/coursework/collected_hhr_parse/
+        flat: no

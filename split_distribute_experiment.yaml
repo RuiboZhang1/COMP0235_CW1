@@ -1,0 +1,57 @@
+- name: Split and Combine experiment_ids.txt on Host
+  hosts: host
+  gather_facts: no
+  tasks:
+    - name: Create directory for storing split experiment ids
+      ansible.builtin.file:
+        path: "/home/ec2-user/coursework/split_ids/"
+        state: directory
+
+    - name: Split the file into parts with 1000 lines each
+      ansible.builtin.command:
+        cmd: split -l 1000 ~/coursework/experiment_ids.txt ~/coursework/split_ids/part_
+
+    - name: Combine the first two files
+      ansible.builtin.shell:
+        cmd: cat ~/coursework/split_ids/part_aa >> ~/coursework/split_ids/part_ab
+
+    - name: Remove the file used for combination
+      ansible.builtin.file:
+        path: ~/coursework/split_ids/part_aa
+        state: absent
+    
+    - name: Sync split_ids directory with S3 bucket
+      community.aws.aws_s3:
+        bucket: comp0235-ucabrz5
+        mode: sync
+        file_root: /home/ec2-user/coursework/split_ids
+        # dest: s3://comp0235-ucabrz5/split_ids/
+
+
+# - name: Prepare clients for receiving files
+#   hosts: clients
+#   gather_facts: no
+#   become: true
+#   tasks:
+#     - name: Create main_pipeline directory
+#       ansible.builtin.file:
+#         path: "/home/ec2-user/data/coursework/main_pipeline"
+#         state: directory
+
+# - name: Distribute files to clients using scp
+#   hosts: host
+#   gather_facts: no
+#   tasks:
+#     - name: Copy split file to client
+#       ansible.builtin.copy:
+#         src: "/home/ec2-user/coursework/{{ item.src }}"
+#         dest: "/home/ec2-user/data/coursework/main_pipeline/split_experiment_ids.txt"
+#         remote_src: no
+#       become: yes
+#       loop:
+#         - { src: 'part_ab', host: 'client' }
+#         - { src: 'part_ac', host: 'cluster_1' }
+#         - { src: 'part_ad', host: 'cluster_2' }
+#         - { src: 'part_ae', host: 'cluster_3' }
+#         - { src: 'part_af', host: 'cluster_4' }
+#       when: inventory_hostname == hostvars[item.host].ansible_host

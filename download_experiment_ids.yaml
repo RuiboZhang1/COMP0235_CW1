@@ -1,0 +1,56 @@
+---
+- name: Fetch experiment_ids file from S3
+  hosts: clients
+  become: yes
+  tasks:
+    - name: Create main_pipeline directory
+      ansible.builtin.file:
+        path: "/home/ec2-user/data/coursework/main_pipeline"
+        state: directory
+    
+    - name: Download Python script for all machines
+      amazon.aws.aws_s3:
+        bucket: comp0235-ucabrz5
+        object: 'split_ids/generate_fa_from_ids.py'
+        dest: '/home/ec2-user/data/coursework/main_pipeline/generate_fa_from_ids.py'
+        mode: get
+
+    - name: Download part_ab for client
+      amazon.aws.aws_s3:
+        bucket: comp0235-ucabrz5
+        object: 'split_ids/part_ab'
+        dest: '/home/ec2-user/data/coursework/main_pipeline/part_experiment_ids.txt'
+        mode: get
+      when: inventory_hostname == 'client'
+
+    - name: Download part_ac for cluster_1
+      amazon.aws.aws_s3:
+        bucket: comp0235-ucabrz5
+        object: 'split_ids/part_ac'
+        dest: '/home/ec2-user/data/coursework/main_pipeline/part_experiment_ids.txt'
+        mode: get
+      when: inventory_hostname == 'cluster_1'
+
+    - name: Download part_ad for cluster_2
+      amazon.aws.aws_s3:
+        bucket: comp0235-ucabrz5
+        object: 'split_ids/part_ad'
+        dest: '/home/ec2-user/data/coursework/main_pipeline/part_experiment_ids.txt'
+        mode: get
+      when: inventory_hostname == 'cluster_2'
+
+    - name: Download part_ae for cluster_3
+      amazon.aws.aws_s3:
+        bucket: comp0235-ucabrz5
+        object: 'split_ids/part_ae'
+        dest: '/home/ec2-user/data/coursework/main_pipeline/part_experiment_ids.txt'
+        mode: get
+      when: inventory_hostname == 'cluster_3'
+
+    - name: Download part_af for cluster_4
+      amazon.aws.aws_s3:
+        bucket: comp0235-ucabrz5
+        object: 'split_ids/part_af'
+        dest: '/home/ec2-user/data/coursework/main_pipeline/part_experiment_ids.txt'
+        mode: get
+      when: inventory_hostname == 'cluster_4'

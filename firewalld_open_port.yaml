@@ -1,0 +1,32 @@
+- name: Configure firewalld and open specific ports
+  hosts: clients
+  become: true
+  tasks:
+    - name: Ensure firewalld is installed
+      ansible.builtin.package:
+        name: firewalld
+        state: present
+
+    - name: Enable and start firewalld
+      ansible.builtin.systemd:
+        name: firewalld
+        enabled: true
+        state: started
+
+    - name: Open TCP and UDP ports 4505 and 4506
+      ansible.posix.firewalld:
+        port: "{{ item }}"
+        permanent: true
+        state: enabled
+        zone: public
+      loop:
+        - "4505/tcp"
+        - "4505/udp"
+        - "4506/tcp"
+        - "4506/udp"
+
+    - name: Reload firewalld
+      ansible.builtin.service:
+        name: firewalld
+        state: reloaded
+

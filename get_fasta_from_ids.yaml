@@ -1,0 +1,7 @@
+- name: Run Python script on clients
+  hosts: clients
+  become: yes
+  tasks:
+    - name: Execute the Python script
+      ansible.builtin.command:
+        cmd: python3 /home/ec2-user/data/coursework/main_pipeline/generate_fa_from_ids.py

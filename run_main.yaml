@@ -1,0 +1,24 @@
+- name: Clean up files, generate fasta, run pipeline script on clients
+  hosts: clients
+  become: true
+  tasks:
+    - name: Ensure specific files are absent in main_pipeline directory
+      ansible.builtin.file:
+        path: "/home/ec2-user/data/coursework/main_pipeline/{{ item }}"
+        state: absent
+      loop:
+        - "main.fas"
+        - "main.horiz"
+        - "main.a3m"
+        - "main.hhr"
+        - "hhr_parse.out"
+
+    - name: Generate fasta files from the experiment_ids
+      ansible.builtin.command:
+        cmd: python3 ./main_pipeline/generate_fa_from_ids.py
+        chdir: /home/ec2-user/data/coursework/
+
+    - name: Execute pipeline script
+      ansible.builtin.command:
+        cmd: sudo python pipeline_script.py ./main_pipeline/main.fasta
+        chdir: /home/ec2-user/data/coursework/

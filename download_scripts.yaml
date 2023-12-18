@@ -1,0 +1,22 @@
+- name: Download files from S3 bucket
+  hosts: clients
+  become: true
+  tasks:
+    - name: Ensure destination directory exists
+      ansible.builtin.file:
+        path: "/home/ec2-user/data/coursework"
+        state: directory
+
+    - name: Download results_parser.py from S3 bucket
+      amazon.aws.aws_s3:
+        bucket: "comp0235-ucabrz5"
+        object: "results_parser.py"
+        dest: "/home/ec2-user/data/coursework/results_parser.py"
+        mode: get
+
+    - name: Download pipeline_script.py from S3 bucket
+      amazon.aws.aws_s3:
+        bucket: "comp0235-ucabrz5"
+        object: "pipeline_script.py"
+        dest: "/home/ec2-user/data/coursework/pipeline_script.py"
+        mode: get

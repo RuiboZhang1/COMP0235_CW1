@@ -1,0 +1,58 @@
+
+PLAY [Clean up files, generate fasta, run pipeline script on clients] **********
+
+TASK [Gathering Facts] *********************************************************
+ok: [client]
+ok: [cluster_1]
+ok: [cluster_3]
+ok: [cluster_4]
+ok: [cluster_2]
+
+TASK [Ensure specific files are absent in main_pipeline directory] *************
+changed: [cluster_4] => (item=main.fas)
+changed: [cluster_1] => (item=main.fas)
+changed: [client] => (item=main.fas)
+changed: [cluster_2] => (item=main.fas)
+changed: [cluster_3] => (item=main.fas)
+changed: [cluster_4] => (item=main.horiz)
+changed: [cluster_3] => (item=main.horiz)
+changed: [cluster_1] => (item=main.horiz)
+changed: [client] => (item=main.horiz)
+changed: [cluster_2] => (item=main.horiz)
+changed: [cluster_3] => (item=main.a3m)
+changed: [client] => (item=main.a3m)
+changed: [cluster_4] => (item=main.a3m)
+changed: [cluster_1] => (item=main.a3m)
+changed: [cluster_2] => (item=main.a3m)
+changed: [cluster_3] => (item=main.hhr)
+changed: [cluster_4] => (item=main.hhr)
+changed: [cluster_1] => (item=main.hhr)
+changed: [client] => (item=main.hhr)
+changed: [cluster_2] => (item=main.hhr)
+changed: [cluster_3] => (item=hhr_parse.out)
+changed: [cluster_4] => (item=hhr_parse.out)
+changed: [cluster_1] => (item=hhr_parse.out)
+changed: [client] => (item=hhr_parse.out)
+changed: [cluster_2] => (item=hhr_parse.out)
+
+TASK [Generate fasta files from the experiment_ids] ****************************
+changed: [cluster_4]
+changed: [cluster_3]
+changed: [cluster_2]
+changed: [cluster_1]
+changed: [client]
+
+TASK [Execute pipeline script] *************************************************
+changed: [client]
+changed: [cluster_4]
+changed: [cluster_2]
+changed: [cluster_3]
+changed: [cluster_1]
+
+PLAY RECAP *********************************************************************
+client                     : ok=4    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+cluster_1                  : ok=4    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+cluster_2                  : ok=4    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+cluster_3                  : ok=4    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+cluster_4                  : ok=4    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
